@@ -4,9 +4,10 @@ namespace CalculateTaxes.Domain.Interfaces.Services
 {
     public interface IClientService
     {
-        Task<ClientCreateResponse> CreateClient(ClientCreate createDto);
-        Task<ClientUpdateResponse> UpdateClient(ClientUpdate updateDto);
+        Task<ClientResponse> CreateClient(ClientCreate createDto);
+        Task<ClientResponse> UpdateClient(ClientUpdate updateDto);
         Task<ClientResponse?> GetByIdClient(int id);
+        Task<ClientResponse?> GetByCPFClient(string cpf);
         Task<IEnumerable<ClientResponse>> GetAllClients();
     }
 }

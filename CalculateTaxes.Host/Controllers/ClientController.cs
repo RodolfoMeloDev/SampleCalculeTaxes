@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using CalculateTaxes.Data.Exception;
 using CalculateTaxes.Domain.Dtos.Client;
 using CalculateTaxes.Domain.Interfaces.Services;
@@ -53,12 +49,44 @@ namespace CalculateTaxes.Host.Controllers
         }
 
         [HttpGet]
+        [Route("CPF")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientResponse))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByCPFClient([FromQuery] string cpf)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var result = await _service.GetByCPFClient(cpf);
+
+                if (result == null)
+                    return NoContent();
+
+                return Ok(result);
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogError("{error}", JsonConvert.SerializeObject(e));
+                return StatusCode((int)HttpStatusCode.BadRequest, e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("{error}", JsonConvert.SerializeObject(e));
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("All")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ClientResponse>))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByAllProduct()
+        public async Task<IActionResult> GetByAllClients()
         {
             try
             {
@@ -85,10 +113,10 @@ namespace CalculateTaxes.Host.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ClientCreateResponse))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ClientResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateProduct([FromBody] ClientCreate createDto)
+        public async Task<IActionResult> CreateClient([FromBody] ClientCreate createDto)
         {
             try
             {
@@ -115,10 +143,10 @@ namespace CalculateTaxes.Host.Controllers
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientUpdateResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClientResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateProduct([FromBody] ClientUpdate updateDto)
+        public async Task<IActionResult> UpdateClient([FromBody] ClientUpdate updateDto)
         {
             try
             {

@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen(swg =>
 var config = new MapperConfiguration(cfg =>
 {
     cfg.AddProfile(new DtoToEntityProfile());
+    cfg.AddProfile(new EntityToDtoProfile());
 });
 
 IMapper mapper = config.CreateMapper();

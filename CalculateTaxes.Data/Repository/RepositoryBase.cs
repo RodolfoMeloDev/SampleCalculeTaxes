@@ -9,7 +9,7 @@ namespace CalculateTaxes.Data.Repository
     public class RepositoryBase<T>(AppDBContext context) : IRepositoryBase<T> where T : BaseEntity
     {
         protected readonly AppDBContext _context = context;
-        private DbSet<T> _dataSet = context.Set<T>();
+        protected DbSet<T> _dataSet = context.Set<T>();
 
         public async Task<bool> ExistAsync(int id)
         {
@@ -29,7 +29,6 @@ namespace CalculateTaxes.Data.Repository
         public async Task<T> InsertAsync(T item)
         {
             item.CreatedAt = DateTime.Now;
-            item.Active = true;
 
             _dataSet.Add(item);
             await _context.SaveChangesAsync();

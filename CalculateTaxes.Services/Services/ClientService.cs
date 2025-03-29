@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data;
 using AutoMapper;
 using CalculateTaxes.Domain.Dtos.Client;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
 using CalculateTaxes.Domain.Interfaces.Services;
-using CalculateTaxes.Domain.Models;
 
 namespace CalculateTaxes.Services.Services
 {
@@ -16,17 +12,28 @@ namespace CalculateTaxes.Services.Services
         private readonly IClientRepository _repository = repository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<ClientCreateResponse> CreateClient(ClientCreate createDto)
+        public async Task<ClientResponse> CreateClient(ClientCreate createDto)
         {
+            var client = await _repository.GetByCPFAsync(createDto.CPF);
+
+            if (client != null)
+                throw new DuplicateNameException($"O cliente informado já está cadastrada. Id: {client.Id}");
+
             var entity = _mapper.Map<ClientEntity>(createDto);
             var result = await _repository.InsertAsync(entity);
 
-            return _mapper.Map<ClientCreateResponse>(result);
+            return _mapper.Map<ClientResponse>(result);
         }
 
         public async Task<IEnumerable<ClientResponse>> GetAllClients()
         {
             return _mapper.Map<IEnumerable<ClientResponse>>(await _repository.GetAllAsync());
+        }
+
+        public async Task<ClientResponse?> GetByCPFClient(string cpf)
+        {
+            var entity = await _repository.GetByCPFAsync(cpf);
+            return _mapper.Map<ClientResponse?>(entity);
         }
 
         public async Task<ClientResponse?> GetByIdClient(int id)
@@ -35,12 +42,12 @@ namespace CalculateTaxes.Services.Services
             return _mapper.Map<ClientResponse?>(entity);
         }
 
-        public async Task<ClientUpdateResponse> UpdateClient(ClientUpdate updateDto)
+        public async Task<ClientResponse> UpdateClient(ClientUpdate updateDto)
         {
             var entity = _mapper.Map<ClientEntity>(updateDto);
             var result = await _repository.UpdateAsync(entity);
 
-            return _mapper.Map<ClientUpdateResponse>(result);
+            return _mapper.Map<ClientResponse>(result);
         }
     }
 }

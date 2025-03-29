@@ -18,6 +18,7 @@ namespace CalculateTaxes.CrossCutting.DependencyInjection
             serviceCollection.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
             serviceCollection.AddScoped<IClientRepository, ClientRepository>();
+            serviceCollection.AddScoped<IFeatureFlagRepository, FeatureFlagRepository>();
 
             serviceCollection.AddDbContext<AppDBContext>(
                     options => options.UseInMemoryDatabase("AppDB")

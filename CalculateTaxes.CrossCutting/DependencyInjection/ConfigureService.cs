@@ -14,6 +14,7 @@ namespace CalculateTaxes.CrossCutting.DependencyInjection
         {
             serviceCollection.AddTransient<IProductService, ProductService>();
             serviceCollection.AddTransient<IClientService, ClientService>();
+            serviceCollection.AddTransient<IFeatureFlagService, FeatureFlagService>();
         }
     }
 }
