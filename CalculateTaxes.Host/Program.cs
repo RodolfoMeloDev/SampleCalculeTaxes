@@ -25,9 +25,9 @@ IMapper mapper = config.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddControllers()                
+builder.Services.AddControllers()         
     .AddJsonOptions(options =>
-    {
+    {   
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
