@@ -1,9 +1,9 @@
+using System.Data;
 using AutoMapper;
 using CalculateTaxes.Domain.Dtos.Product;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
 using CalculateTaxes.Domain.Interfaces.Services;
-using CalculateTaxes.Domain.Models;
 
 namespace CalculateTaxes.Services.Services
 {
@@ -12,30 +12,35 @@ namespace CalculateTaxes.Services.Services
         private readonly IProductRepository _repository = repository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<ProductCreateResponse> CreateProduct(ProductCreate createDto)
+        public async Task<ProductResponse> CreateProduct(ProductCreate createDto)
         {
+            var product = await _repository.GetByNameAsync(createDto.Name);
+
+            if (product != null)
+                throw new DuplicateNameException($"O Produto informada já está cadastrada. Id: {product.Id}");
+
             var entity = _mapper.Map<ProductEntity>(createDto);
             var result = await _repository.InsertAsync(entity);
 
-            return _mapper.Map<ProductCreateResponse>(result);
+            return _mapper.Map<ProductResponse>(result);
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProducts()
+        public async Task<IEnumerable<ProductResponse>> GetAllProducts()
         {
-            return _mapper.Map<IEnumerable<ProductDto>>(await _repository.GetAllAsync());
+            return _mapper.Map<IEnumerable<ProductResponse>>(await _repository.GetAllAsync());
         }
 
-        public async Task<ProductDto?> GetByIdProduct(int id)
+        public async Task<ProductResponse?> GetByIdProduct(int id)
         {
-            return _mapper.Map<ProductDto?>(await _repository.GetByIdAsync(id));
+            return _mapper.Map<ProductResponse?>(await _repository.GetByIdAsync(id));
         }
 
-        public async Task<ProductUpdateResponse> UpdateProduct(ProductUpdate updateDto)
+        public async Task<ProductResponse> UpdateProduct(ProductUpdate updateDto)
         {
             var entity = _mapper.Map<ProductEntity>(updateDto);
             var result = await _repository.UpdateAsync(entity);
 
-            return _mapper.Map<ProductUpdateResponse>(result);
+            return _mapper.Map<ProductResponse>(result);
         }
     }
 }

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalculateTaxes.Data.Repository
 {
-    public class ProductRepository(AppDBContext context) : RepositoryBase<ProductEntity>(context), IProductRepository
+    public class FeatureFlagRepository(AppDBContext context) : RepositoryBase<FeatureFlagEntity>(context), IFeatureFlagRepository
     {
-        public async Task<ProductEntity?> GetByNameAsync(string name)
+        public async Task<FeatureFlagEntity?> GetByNameAsync(string name)
         {
             return await _dataSet.Where(f => f.Name.Equals(name)).FirstOrDefaultAsync();
         }
