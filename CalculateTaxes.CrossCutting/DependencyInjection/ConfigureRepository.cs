@@ -17,6 +17,7 @@ namespace CalculateTaxes.CrossCutting.DependencyInjection
             // Banco de dados espera sempre um serviço de scopo
             serviceCollection.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
+            serviceCollection.AddScoped<IClientRepository, ClientRepository>();
 
             serviceCollection.AddDbContext<AppDBContext>(
                     options => options.UseInMemoryDatabase("AppDB")

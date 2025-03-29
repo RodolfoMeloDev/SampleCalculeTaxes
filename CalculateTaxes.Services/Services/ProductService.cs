@@ -14,12 +14,8 @@ namespace CalculateTaxes.Services.Services
 
         public async Task<ProductCreateResponse> CreateProduct(ProductCreate createDto)
         {
-            var result = await _repository.InsertAsync( 
-                new ProductEntity
-                {
-                    Name = new Name(createDto.Name).Value,
-                    Price = new Price(createDto.Price).Value
-                });
+            var entity = _mapper.Map<ProductEntity>(createDto);
+            var result = await _repository.InsertAsync(entity);
 
             return _mapper.Map<ProductCreateResponse>(result);
         }
@@ -36,15 +32,8 @@ namespace CalculateTaxes.Services.Services
 
         public async Task<ProductUpdateResponse> UpdateProduct(ProductUpdate updateDto)
         {
-            var result = await _repository.UpdateAsync( 
-                new ProductEntity
-                {
-                    Id = updateDto.id,
-                    Name = new Name(updateDto.Name).Value,
-                    Price = new Price(updateDto.Price).Value,
-                    Active = updateDto.Active
-                }
-            );
+            var entity = _mapper.Map<ProductEntity>(updateDto);
+            var result = await _repository.UpdateAsync(entity);
 
             return _mapper.Map<ProductUpdateResponse>(result);
         }

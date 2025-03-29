@@ -1,13 +1,12 @@
 namespace CalculateTaxes.Domain.Models
 {
-    public class Name
+    public record Name
     {
-        public string Value { get; private set; }
-
+        public string Value { get; }
         public Name(string name)
         {
             Validate(name);
-            this.Value = name.ToLower();
+            Value = name.ToLower();
         }
 
         private static void Validate(string name)
