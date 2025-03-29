@@ -1,6 +1,7 @@
 using AutoMapper;
 using CalculateTaxes.Domain.Dtos.Client;
 using CalculateTaxes.Domain.Dtos.FeatureFlag;
+using CalculateTaxes.Domain.Dtos.Order;
 using CalculateTaxes.Domain.Dtos.Product;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Models;
@@ -45,7 +46,12 @@ namespace CalculateTaxes.CrossCutting.Mappings
                     _ =new Name(src.Name);
                 });
 
-            CreateMap<FeatureFlagUpdate, FeatureFlagEntity>();                        
+            CreateMap<FeatureFlagUpdate, FeatureFlagEntity>();
+            #endregion
+        
+            #region Orders
+            CreateMap<OrderCreate, OrderEntity>();
+            CreateMap<ItemOrderCreate, ItemsOrderEntity>();
             #endregion
         }
     }
