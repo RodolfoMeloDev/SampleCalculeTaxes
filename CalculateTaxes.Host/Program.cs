@@ -4,6 +4,7 @@ using AutoMapper;
 using CalculateTaxes.CrossCutting.DependencyInjection;
 using CalculateTaxes.CrossCutting.Mappings;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("REDIS_CONNECTION")!) 
+);
 
 
 ConfigureRepository.ConfigureDependenciesRepository(builder.Services);
