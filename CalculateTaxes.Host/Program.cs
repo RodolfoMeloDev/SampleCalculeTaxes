@@ -4,6 +4,8 @@ using AutoMapper;
 using CalculateTaxes.CrossCutting.DependencyInjection;
 using CalculateTaxes.CrossCutting.Mappings;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +45,16 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 ConfigureRepository.ConfigureDependenciesRepository(builder.Services);
 ConfigureService.ConfigureDependenciesService(builder.Services);
 
+builder.Host.UseSerilog((context, services, configuration) =>
+        {
+            configuration
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Serilog.AspNetCore.RequestLoggingMiddleware", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.AspNetCore.Mvc.Infrastructure", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.AspNetCore.Routing.EndpointMiddleware", LogEventLevel.Warning)
+                .WriteTo.Console(outputTemplate: "[{Level:u3}] - {Timestamp:dd-MM-yyyy-HH:mm:ss} - {Message:lj}{NewLine}{Exception}");
+        });
+
 var app = builder.Build();
 
 if (!app.Environment.IsProduction())
@@ -62,6 +74,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSerilogRequestLogging();
 
 app.MapControllers();
 
