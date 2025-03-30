@@ -6,24 +6,54 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalculateTaxes.Data.Repository
 {
-    public class RepositoryBase<T>(AppDBContext context) : IRepositoryBase<T> where T : BaseEntity
+    public class RepositoryBase<T>(AppDBContext context, ICacheRepository cache) : IRepositoryBase<T> where T : BaseEntity
     {
         protected readonly AppDBContext _context = context;
+        protected readonly ICacheRepository _cache = cache;
         protected DbSet<T> _dataSet = context.Set<T>();
+
+        private string _keyItem = $"{typeof(T)}:Item";
+        protected string _keyAll = $"{typeof(T)}:List";
 
         public async Task<bool> ExistAsync(int id)
         {
-            return await _dataSet.AnyAsync(f => f.Id.Equals(id));
+            var cacheData = await _cache.GetCacheAsync<T>(GenerateKey("ExistAsync", id));
+            if (cacheData != null)
+                return true;
+
+            var result = await _dataSet.AnyAsync(f => f.Id.Equals(id));
+
+            await _cache.AddCacheAsync(GenerateKey("ExistAsync", id), result);
+
+            return result;
         }
 
         public async Task<T?> GetByIdAsync(int id)
         {
-            return await _dataSet.Where(f => f.Id.Equals(id)).FirstOrDefaultAsync();
+            var cacheData = await _cache.GetCacheAsync<T>(GenerateKey("Id", id));
+            if (cacheData != null)
+                return cacheData;
+
+            var result = await _dataSet.Where(f => f.Id.Equals(id)).FirstOrDefaultAsync();
+
+            if (result != null)
+                await _cache.AddCacheAsync(GenerateKey("Id", id), result);
+
+            return result;
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dataSet.ToListAsync();
+            var cacheData = await _cache.GetCacheAsync<IEnumerable<T>>($"{_keyAll}:{nameof(GetAllAsync)}");
+            if (cacheData != null)
+                return cacheData;
+
+            var result = await _dataSet.ToListAsync();
+
+            if (result != null && result.Count != 0)
+                await _cache.AddCacheAsync($"{_keyAll}:{nameof(GetAllAsync)}", result);
+
+            return result ?? [];
         }
 
         public async Task<T> InsertAsync(T item)
@@ -33,11 +63,18 @@ namespace CalculateTaxes.Data.Repository
             _dataSet.Add(item);
             await _context.SaveChangesAsync();
 
+            await _cache.AddCacheAsync(GenerateKey("Id", item.Id), item);
+            await _cache.RemoveKeysCacheAsync(_keyAll);
+
             return item;
         }
 
         public async Task<T> UpdateAsync(T item)
         {
+            await _cache.RemoveCacheAsync(GenerateKey("Id", item.Id));
+            await _cache.RemoveKeysCacheAsync(_keyItem);
+            await _cache.RemoveKeysCacheAsync(_keyAll);
+
             var result = await GetByIdAsync(item.Id);
 
             if (result == null)
@@ -49,6 +86,9 @@ namespace CalculateTaxes.Data.Repository
             _context.Entry(result).CurrentValues.SetValues(item);
 
             await _context.SaveChangesAsync();
+            
+            await _cache.RemoveCacheAsync(GenerateKey("Id", item.Id));
+            await _cache.AddCacheAsync(GenerateKey("Id", item.Id), item);
 
             return item;
         }
@@ -62,7 +102,17 @@ namespace CalculateTaxes.Data.Repository
 
             _dataSet.Remove(result);
             await _context.SaveChangesAsync();
+
+            await _cache.RemoveCacheAsync(GenerateKey("Id", id));
+            await _cache.RemoveKeysCacheAsync(_keyItem);
+            await _cache.RemoveKeysCacheAsync(_keyAll);
+
             return true;
         }        
+    
+        protected string GenerateKey(string nameKey, object value)
+        {
+            return $"{_keyItem}:{nameKey}:{value}";
+        }
     }
 }
