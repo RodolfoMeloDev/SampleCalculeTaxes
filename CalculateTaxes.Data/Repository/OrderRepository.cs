@@ -7,6 +7,11 @@ namespace CalculateTaxes.Data.Repository
 {
     public class OrderRepository(AppDBContext context) : RepositoryBase<OrderEntity>(context), IOrdersRepository
     {
+        public async Task<bool> AnyOrderId(int orderId)
+        {
+            return await _dataSet.AnyAsync(f => f.OrderId.Equals(orderId));
+        }
+
         public async Task<OrderEntity?> GetByIdOrderWithItems(int id)
         {
             return await _dataSet.Include(i => i.Items).Where(f => f.Id.Equals(id)).FirstOrDefaultAsync();

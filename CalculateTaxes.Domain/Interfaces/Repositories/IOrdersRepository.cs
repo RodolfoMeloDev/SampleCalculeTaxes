@@ -6,5 +6,6 @@ namespace CalculateTaxes.Domain.Interfaces.Repositories
     {
         Task<IEnumerable<OrderEntity>> GetByStatusOrder(string status);
         Task<OrderEntity?> GetByIdOrderWithItems(int id);
+        Task<bool> AnyOrderId(int orderId);
     }
 }

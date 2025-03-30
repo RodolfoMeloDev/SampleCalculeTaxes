@@ -4,6 +4,7 @@ using CalculateTaxes.Domain.Dtos.Product;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
 using CalculateTaxes.Domain.Interfaces.Services;
+using CalculateTaxes.Domain.Models;
 
 namespace CalculateTaxes.Services.Services
 {
@@ -18,6 +19,8 @@ namespace CalculateTaxes.Services.Services
 
             if (product != null)
                 throw new DuplicateNameException($"O Produto informada já está cadastrada. Id: {product.Id}");
+
+            _ = new Name(createDto.Name);
 
             var entity = _mapper.Map<ProductEntity>(createDto);
             var result = await _repository.InsertAsync(entity);
@@ -37,6 +40,7 @@ namespace CalculateTaxes.Services.Services
 
         public async Task<ProductResponse> UpdateProduct(ProductUpdate updateDto)
         {
+            _ = new Name(updateDto.Name);
             var entity = _mapper.Map<ProductEntity>(updateDto);
             var result = await _repository.UpdateAsync(entity);
 

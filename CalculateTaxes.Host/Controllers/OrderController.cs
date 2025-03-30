@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using CalculateTaxes.Domain.Dtos.Order;
 using CalculateTaxes.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -49,13 +45,42 @@ namespace CalculateTaxes.Host.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("RecalculateTaxes/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RecalculateTaxes(int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var result = await _service.RecalculateTax(id);
+
+                return Ok(result);
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogError("{error}", JsonConvert.SerializeObject(e));
+                return StatusCode((int)HttpStatusCode.BadRequest, e.Message);
+            }            
+            catch (Exception e)
+            {
+                _logger.LogError("{error}", JsonConvert.SerializeObject(e));
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [HttpGet]
         [Route("id")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrderResponse))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByIdFeatureFlag([FromQuery] int id)
+        public async Task<IActionResult> GetByIdOrder([FromQuery] int id)
         {
             try
             {

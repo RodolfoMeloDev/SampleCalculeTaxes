@@ -4,6 +4,7 @@ using CalculateTaxes.Domain.Dtos.Client;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
 using CalculateTaxes.Domain.Interfaces.Services;
+using CalculateTaxes.Domain.Models;
 
 namespace CalculateTaxes.Services.Services
 {
@@ -18,6 +19,10 @@ namespace CalculateTaxes.Services.Services
 
             if (client != null)
                 throw new DuplicateNameException($"O cliente informado já está cadastrada. Id: {client.Id}");
+
+            _ = new Name(createDto.Name);
+            _ = new Birthday(createDto.Birthday);
+            _ = new CPF(createDto.CPF);
 
             var entity = _mapper.Map<ClientEntity>(createDto);
             var result = await _repository.InsertAsync(entity);
@@ -46,6 +51,8 @@ namespace CalculateTaxes.Services.Services
         {
             var entity = _mapper.Map<ClientEntity>(updateDto);
             var result = await _repository.UpdateAsync(entity);
+
+            _ = new Name(updateDto.Name);
 
             return _mapper.Map<ClientResponse>(result);
         }
