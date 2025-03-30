@@ -1,6 +1,7 @@
 using AutoMapper;
 using CalculateTaxes.Domain.Dtos.Client;
 using CalculateTaxes.Domain.Dtos.FeatureFlag;
+using CalculateTaxes.Domain.Dtos.Order;
 using CalculateTaxes.Domain.Dtos.Product;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Models;
@@ -12,40 +13,26 @@ namespace CalculateTaxes.CrossCutting.Mappings
         public DtoToEntityProfile()
         {
             #region Product
-            CreateMap<ProductCreate, ProductEntity>()
-                .BeforeMap((src, dest) => {
-                    _ =new Name(src.Name);
-                    _ = new Price(src.Price);
-                });
+            CreateMap<ProductCreate, ProductEntity>();
 
-            CreateMap<ProductUpdate, ProductEntity>()
-                .BeforeMap((src, dest) => {
-                    _ =new Name(src.Name);
-                    _ = new Price(src.Price);
-                });
+            CreateMap<ProductUpdate, ProductEntity>();
             #endregion
 
             #region Client
-            CreateMap<ClientCreate, ClientEntity>()
-                .BeforeMap((src, dest) => {
-                    _ =new Name(src.Name);
-                    _ = new Birthday(src.Birthday);
-                    _ = new CPF(src.CPF);
-                });
+            CreateMap<ClientCreate, ClientEntity>();
 
-            CreateMap<ClientUpdate, ClientEntity>()
-                .BeforeMap((src, dest) => {
-                    _ =new Name(src.Name);
-                });
+            CreateMap<ClientUpdate, ClientEntity>();
             #endregion
         
             #region FeatureFlag
-            CreateMap<FeatureFlagCreate, FeatureFlagEntity>()
-                .BeforeMap((src, dest) => {
-                    _ =new Name(src.Name);
-                });
+            CreateMap<FeatureFlagCreate, FeatureFlagEntity>();
 
-            CreateMap<FeatureFlagUpdate, FeatureFlagEntity>();                        
+            CreateMap<FeatureFlagUpdate, FeatureFlagEntity>();
+            #endregion
+        
+            #region Orders
+            CreateMap<OrderCreate, OrderEntity>();
+            CreateMap<ItemOrderCreate, ItemsOrderEntity>();
             #endregion
         }
     }

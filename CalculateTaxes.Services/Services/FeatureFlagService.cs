@@ -4,6 +4,8 @@ using CalculateTaxes.Domain.Dtos.FeatureFlag;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
 using CalculateTaxes.Domain.Interfaces.Services;
+using CalculateTaxes.Domain.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CalculateTaxes.Services.Services
 {
@@ -18,6 +20,8 @@ namespace CalculateTaxes.Services.Services
 
             if (featureFlag != null)
                 throw new DuplicateNameException($"A FeatureFlag informada já está cadastrada. Id: {featureFlag.Id}");
+
+            _ = new Name(createDto.Name);
 
             var entity = _mapper.Map<FeatureFlagEntity>(createDto);
             var result = await _repository.InsertAsync(entity);

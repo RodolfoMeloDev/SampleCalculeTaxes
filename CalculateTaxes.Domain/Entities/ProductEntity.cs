@@ -6,6 +6,5 @@ namespace CalculateTaxes.Domain.Entities
     {
         [MaxLength(100)]
         public required string Name { get; set; }
-        public required decimal Price { get; set; }
     }
 }
