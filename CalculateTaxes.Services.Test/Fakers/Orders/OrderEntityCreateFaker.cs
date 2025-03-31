@@ -23,21 +23,17 @@ namespace CalculateTaxes.Services.Test.Fakers.Orders
 
         public OrderEntityCreateFaker(OrderCreate createFaker)
         {
-            List<ItemsOrderEntity> itemsOrders = [];
-            createFaker.Items.ForEach(item => {
-                itemsOrders.Add( new ItemsOrderEntity
-                {
-                    Product = new ProductEntity { Name = $"ProductName_{item.ProductId}" },
-                    ProductId = item.ProductId,
-                    Amount = item.Amount,
-                    Price = item.Price
-                } );
-            });
-
             RuleFor(r => r.Id, f => f.Random.Int(1, 1000));
             RuleFor(r => r.OrderId, createFaker.OrderId);
             RuleFor(r => r.ClientId, createFaker.ClientId);
-            RuleFor(r => r.Items, itemsOrders);
+            RuleFor(r => r.Items, (f, order) => 
+                new Faker<ItemsOrderEntity>()
+                        .RuleFor(r => r.OrderId, _ => order.OrderId) 
+                        .RuleFor(r => r.ProductId, f => f.Random.Int(1, 10))
+                        .RuleFor(r => r.Amount, f => f.Random.Int(1, 5))
+                        .RuleFor(r => r.Price, f => f.Random.Decimal(0.01m, 100m))
+                        .Generate(f.Random.Int(1, 5)))
+                .RuleFor(r => r.Taxes, (f, order) => order.Items.Sum(i => i.Price) * 0.3m);
             RuleFor(r => r.Active, true);
             RuleFor(r => r.Status, "Criado");
             RuleFor(r => r.CreatedAt, DateTime.Now);
