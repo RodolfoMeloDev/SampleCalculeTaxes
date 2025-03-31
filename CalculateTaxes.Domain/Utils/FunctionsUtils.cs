@@ -1,4 +1,4 @@
-namespace CalculateTaxes.Services.Test.Fakers.Utils
+namespace CalculateTaxes.Domain.Utils
 {
     public static class FunctionsUtils
     {

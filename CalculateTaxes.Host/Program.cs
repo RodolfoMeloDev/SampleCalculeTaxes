@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using CalculateTaxes.CrossCutting.DependencyInjection;
 using CalculateTaxes.CrossCutting.Mappings;
+using CalculateTaxes.Data.Seed;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
@@ -78,5 +79,7 @@ app.UseAuthorization();
 app.UseSerilogRequestLogging();
 
 app.MapControllers();
+
+DatabaseInitializer.Seed(app.Services);
 
 app.Run();
