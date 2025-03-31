@@ -2,11 +2,10 @@ namespace CalculateTaxes.Domain.Models
 {
     public record Birthday
     {
-        public DateOnly Value { get; }
+        public static int MaxAge {get; private set;} = 120;
         public Birthday(DateOnly birthday)
         {
             Validate(birthday);
-            Value = birthday;
         }
 
         private static void Validate(DateOnly birthday)
@@ -14,7 +13,7 @@ namespace CalculateTaxes.Domain.Models
             if (birthday > DateOnly.FromDateTime(DateTime.Now))
                 throw new ArgumentException("A data de nascimento não pode ser maior que a data Atual");
 
-            if (ReturnAge(birthday) > 120)
+            if (ReturnAge(birthday) > MaxAge)
                 throw new ArgumentException("Não é permitido que a data de nascimento seja maior que 120 anos");
         }
 

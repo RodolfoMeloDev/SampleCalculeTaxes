@@ -41,11 +41,9 @@ namespace CalculateTaxes.Services.Services
 
         public async Task<OrderResponse> RecalculateTax(int id)
         {
-            var order = await _repository.GetByIdOrderWithItems(id);
-
-            if (order == null)
+            var order = await _repository.GetByIdOrderWithItems(id) ?? 
                 throw new Exception("Não foi encontrado o item para recalculo");
-
+                
             order.Taxes = await CalculateValueTax(order.Items);
 
             var result = await _repository.UpdateAsync(order);
@@ -103,7 +101,7 @@ namespace CalculateTaxes.Services.Services
                 }
             });
 
-            if (productInvalid.Length > 0 && productInvalid.ToString()[productInvalid.Length-1].Equals(","))
+            if (productInvalid.Length > 0 && productInvalid.ToString()[productInvalid.Length-1].Equals(','))
                 productInvalid.Length--;
             productError = productInvalid.ToString();
         }
