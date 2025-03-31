@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateTaxes.Host", "Calc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateTaxes.Services", "CalculateTaxes.Services\CalculateTaxes.Services.csproj", "{FB63982F-8ECC-42C7-BB60-D9DD3F3C61A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateTaxes.Services.Test", "CalculateTaxes.Services.Test\CalculateTaxes.Services.Test.csproj", "{C7380AD4-7C77-4B7B-9AB8-F3A5A2287E51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{FB63982F-8ECC-42C7-BB60-D9DD3F3C61A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB63982F-8ECC-42C7-BB60-D9DD3F3C61A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB63982F-8ECC-42C7-BB60-D9DD3F3C61A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7380AD4-7C77-4B7B-9AB8-F3A5A2287E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7380AD4-7C77-4B7B-9AB8-F3A5A2287E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7380AD4-7C77-4B7B-9AB8-F3A5A2287E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7380AD4-7C77-4B7B-9AB8-F3A5A2287E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

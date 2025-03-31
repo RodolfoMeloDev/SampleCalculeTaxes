@@ -5,6 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Test Debug",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/CalculateTaxes.Services.Test/bin/Debug/net8.0/CalculateTaxes.Services.Test.dll",
+            "args": [
+                "--list-tests",
+                "--filter", "FullyQualifiedName=NamespaceDoTeste.NomeDoTeste"
+            ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "justMyCode": true,
+            "console": "internalConsole"
+        },
+        {
             "name": "Debug",
             "type": "coreclr",
             "request": "launch",

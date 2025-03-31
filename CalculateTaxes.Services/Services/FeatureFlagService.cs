@@ -5,7 +5,6 @@ using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
 using CalculateTaxes.Domain.Interfaces.Services;
 using CalculateTaxes.Domain.Models;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CalculateTaxes.Services.Services
 {
