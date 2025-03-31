@@ -4,11 +4,9 @@ namespace CalculateTaxes.Domain.Models
 {
     public class CPF
     {
-        public string Value { get; }
         public CPF(string cpf)
         {
             Validate(cpf);
-            Value = cpf;
         }
 
         private static void Validate(string cpf)
