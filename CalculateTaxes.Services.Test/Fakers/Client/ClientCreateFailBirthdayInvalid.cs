@@ -1,6 +1,6 @@
 using Bogus;
 using CalculateTaxes.Domain.Dtos.Client;
-using CalculateTaxes.Services.Test.Fakers.Utils;
+using CalculateTaxes.Domain.Utils;
 
 namespace CalculateTaxes.Services.Test.Fakers.Client
 {

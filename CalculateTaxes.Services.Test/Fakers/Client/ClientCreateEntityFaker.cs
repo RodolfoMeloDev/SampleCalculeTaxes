@@ -2,7 +2,7 @@ using Bogus;
 using CalculateTaxes.Domain.Dtos.Client;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Models;
-using CalculateTaxes.Services.Test.Fakers.Utils;
+using CalculateTaxes.Domain.Utils;
 
 namespace CalculateTaxes.Services.Test.Fakers.Client
 {
@@ -13,7 +13,7 @@ namespace CalculateTaxes.Services.Test.Fakers.Client
             RuleFor(r => r.Id, f => f.Random.Int(1, 1000));
             RuleFor(r => r.Name, f => f.Name.FullName());
             RuleFor(r => r.Birthday, f => f.Date.PastDateOnly(Birthday.MaxAge, DateOnly.FromDateTime(DateTime.Today)));
-            RuleFor(r => r.CPF, FunctionsUtils.GenerateCPF());
+            RuleFor(r => r.CPF, f => FunctionsUtils.GenerateCPF());
             RuleFor(r => r.Active, true);
             RuleFor(r => r.CreatedAt, DateTime.Now);
         }

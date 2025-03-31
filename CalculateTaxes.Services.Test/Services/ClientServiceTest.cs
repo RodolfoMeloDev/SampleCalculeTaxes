@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Bogus.DataSets;
 using CalculateTaxes.Domain.Entities;
 using CalculateTaxes.Domain.Interfaces.Repositories;
-using CalculateTaxes.Domain.Models;
+using CalculateTaxes.Domain.Utils;
 using CalculateTaxes.Services.Services;
 using CalculateTaxes.Services.Test.Fakers.Client;
-using CalculateTaxes.Services.Test.Fakers.Utils;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
