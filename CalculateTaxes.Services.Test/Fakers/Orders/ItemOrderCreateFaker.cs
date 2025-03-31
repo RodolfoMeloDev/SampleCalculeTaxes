@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using CalculateTaxes.Domain.Dtos.Order;
-using Xunit;
 
 namespace CalculateTaxes.Services.Test.Fakers.Orders
 {

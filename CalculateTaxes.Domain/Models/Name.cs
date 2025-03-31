@@ -2,11 +2,10 @@ namespace CalculateTaxes.Domain.Models
 {
     public record Name
     {
-        public string Value { get; }
+        public static int MaxLength {get; private set;} = 100;
         public Name(string name)
         {
             Validate(name);
-            Value = name.ToLower();
         }
 
         private static void Validate(string name)
@@ -14,8 +13,8 @@ namespace CalculateTaxes.Domain.Models
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("O nome não pode ser nulo ou vazio");
 
-            if (name.Length > 100)
-                throw new ArgumentException("O nome não pode ter mais 100 caracteres");
+            if (name.Length > MaxLength)
+                throw new ArgumentException($"O nome não pode ter mais {MaxLength} caracteres");
 
         }
     }
