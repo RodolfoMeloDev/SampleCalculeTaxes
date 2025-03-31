@@ -17,7 +17,17 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(swg =>
 {
-    swg.SwaggerDoc("v1", new OpenApiInfo { Title = "Tier.API", Version = "1.0" });
+    swg.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "CalculateTaxes.API",
+        Version = "1.0",
+        Contact = new OpenApiContact
+        {
+            Name = "Rodolfo Lopes de Melo",
+            Email = "rodolfo.melo.dev@gmail.com",
+            Url = new Uri("https://github.com/RodolfoMeloDev/SampleCalculeTaxes")
+        }
+    });
 });
 
 var config = new MapperConfiguration(cfg =>
